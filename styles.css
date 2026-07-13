@@ -125,8 +125,8 @@ body {
     radial-gradient(120% 90% at 50% 0%, #1b4f86 0%, rgba(27,79,134,0) 62%),
     linear-gradient(165deg, #12457a 0%, #0e3159 46%, #0a2342 100%);
 }
-/* the mesh sits behind the copy and never eats pointer events */
-.iwh-mesh {
+/* the circuit sits behind the copy and never eats pointer events */
+.iwh-circuit {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   z-index: 0;
@@ -299,14 +299,20 @@ body {
   .iw-steps-title { font-size: 25px; }
 }
 
-/* ---------- intro graphic: the page, read twice ---------- */
+/* ---------- intro graphic: one page, x-rayed ---------- */
 .iw-sem-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; fill: #8a98a6; }
-/* the dashed runs read as the page being continuously ingested — slow enough
-   to register as a system working, not as an animation asking for attention */
-.iw-sem-flow { stroke-dasharray: 4 5; animation: iwSemFlow 2.8s linear infinite; }
-@keyframes iwSemFlow { to { stroke-dashoffset: -18; } }
-.iw-sem-check { transform-box: fill-box; transform-origin: center; animation: iwSemPulse 4.5s ease-in-out infinite; }
-@keyframes iwSemPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.09); } }
+/* One animation drives three things — the two clip rects and the beam — so the
+   reveal can never drift out of step with the line that's supposedly causing it.
+   It rests at each end before turning back, which reads as a system taking a
+   reading rather than a slider being dragged. */
+.iw-xray-sweep { animation: iwXraySweep 12s cubic-bezier(.45, 0, .55, 1) infinite; }
+@keyframes iwXraySweep {
+  0%, 7%    { transform: translateX(74px); }
+  45%, 55%  { transform: translateX(446px); }
+  93%, 100% { transform: translateX(74px); }
+}
+.iw-xray-check { transform-box: fill-box; transform-origin: center; animation: iwXrayPulse 4.5s ease-in-out infinite; }
+@keyframes iwXrayPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.09); } }
 
 /* ---------- footer responsive ---------- */
 /* inline styles set the desktop grid; override with !important on small screens */
@@ -326,5 +332,7 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .iw-reveal { transition: none; opacity: 1; transform: none; }
   .iw-track { animation: none !important; }
-  .iw-sem-flow, .iw-sem-check { animation: none !important; }
+  /* the scan parks mid-card: both readings stay legible, nothing moves */
+  .iw-xray-sweep { animation: none !important; transform: translateX(260px); }
+  .iw-xray-check { animation: none !important; }
 }

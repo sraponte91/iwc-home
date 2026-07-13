@@ -208,153 +208,221 @@ function initNav() {
   onScroll();
 }
 
+
+
 /* -----------------------------------------------------------
-   HERO NEURAL MESH — drifting nodes wired to their neighbours;
-   signals fire along the links, and the cursor recruits the
-   nodes around it into the network
+   HERO CIRCUIT — routed traces, drawn once onto an offscreen
+   board, with signals firing along them. The board is static; only
+   the signals move, so a frame costs one blit plus a few strokes.
+   Nothing responds to the cursor.
    ----------------------------------------------------------- */
-function initMesh() {
+function initCircuit() {
   var hero = document.querySelector('[data-hero]');
   if (!hero) return;
-  var canvas = hero.querySelector('[data-mesh]');
+  var canvas = hero.querySelector('[data-circuit]');
   if (!canvas) return;
   var ctx = canvas.getContext('2d');
   if (!ctx) return;
 
-  var DENSITY = 15000;    // one node per N square px — keeps density even at any size
-  var MAX_NODES = 120;
-  var LINK = 168;         // nodes closer than this get wired together
-  var REACH = 220;        // how far the cursor recruits
-  var DRIFT = 0.16;       // node speed in px/frame — slow enough to read as ambient
-  var FIRE = 0.008;       // chance per frame that a new signal fires
+  var G = 40;                 // routing grid
+  var CHAMFER = 12;           // corners are cut at 45°, the way a real board routes
+  var TRACES = 22;
+  var SIGNALS = 3;            // how many fire at once — sparse on purpose
+  var TAIL = 62;              // length of the lit stretch behind the signal head
+  var SPEED_MIN = 0.10, SPEED_MAX = 0.22;   // px per ms
+  var GAP_MIN = 900, GAP_MAX = 4200;        // dead time before a signal re-fires
 
-  var W = 0, H = 0;
-  var nodes = [];
-  var signals = [];       // pulses travelling along a link
-  var mx = -9999, my = -9999, tx = -9999, ty = -9999;
-  var raf = null, visible = true;
+  var W = 0, H = 0, dpr = 1;
+  var board = document.createElement('canvas');
+  var bctx = board.getContext('2d');
+  var traces = [];            // each: { pts: [...], seg: [len...], total }
+  var signals = [];
+  var raf = null, visible = true, last = 0;
 
   function rand(a, b) { return a + Math.random() * (b - a); }
+  function randInt(a, b) { return Math.floor(rand(a, b + 1)); }
+
+  // a route: axis-aligned runs that turn at right angles, corners chamfered
+  function route(cols, rows) {
+    var pts = [];
+    var gx = randInt(-1, cols + 1);
+    var gy = randInt(-1, rows + 1);
+    var horiz = Math.random() < 0.5;
+    pts.push({ x: gx * G, y: gy * G });
+
+    var legs = randInt(3, 7);
+    for (var i = 0; i < legs; i++) {
+      var len = randInt(2, 6) * (Math.random() < 0.5 ? 1 : -1);
+      if (horiz) gx = Math.max(-2, Math.min(cols + 2, gx + len));
+      else       gy = Math.max(-2, Math.min(rows + 2, gy + len));
+      var p = { x: gx * G, y: gy * G };
+      var prev = pts[pts.length - 1];
+      if (p.x !== prev.x || p.y !== prev.y) pts.push(p);   // clamping can kill a leg
+      horiz = !horiz;
+    }
+    if (pts.length < 2) return null;
+
+    // cut each corner: replace it with two points set back along the two legs
+    var out = [pts[0]];
+    for (var k = 1; k < pts.length - 1; k++) {
+      var c = pts[k], a = pts[k - 1], b = pts[k + 1];
+      var la = Math.hypot(c.x - a.x, c.y - a.y);
+      var lb = Math.hypot(b.x - c.x, b.y - c.y);
+      var ca = Math.min(CHAMFER, la / 2), cb = Math.min(CHAMFER, lb / 2);
+      out.push({ x: c.x + (a.x - c.x) / la * ca, y: c.y + (a.y - c.y) / la * ca });
+      out.push({ x: c.x + (b.x - c.x) / lb * cb, y: c.y + (b.y - c.y) / lb * cb });
+    }
+    out.push(pts[pts.length - 1]);
+
+    // arc-length table, so a signal can be placed by distance travelled
+    var seg = [], total = 0;
+    for (var s = 0; s < out.length - 1; s++) {
+      var d = Math.hypot(out[s + 1].x - out[s].x, out[s + 1].y - out[s].y);
+      seg.push(d);
+      total += d;
+    }
+    if (total < 120) return null;                          // too stubby to be worth it
+    return { pts: out, seg: seg, total: total };
+  }
+
+  // where along a route does distance d land
+  function at(tr, d) {
+    if (d <= 0) return { x: tr.pts[0].x, y: tr.pts[0].y };
+    for (var i = 0; i < tr.seg.length; i++) {
+      if (d <= tr.seg[i]) {
+        var a = tr.pts[i], b = tr.pts[i + 1];
+        var t = tr.seg[i] ? d / tr.seg[i] : 0;
+        return { x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t };
+      }
+      d -= tr.seg[i];
+    }
+    var last = tr.pts[tr.pts.length - 1];
+    return { x: last.x, y: last.y };
+  }
+
+  function drawBoard() {
+    board.width = Math.round(W * dpr);
+    board.height = Math.round(H * dpr);
+    bctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    bctx.clearRect(0, 0, W, H);
+
+    bctx.lineWidth = 1;
+    bctx.lineJoin = 'round';
+    bctx.strokeStyle = 'rgba(122,178,238,.17)';
+    for (var i = 0; i < traces.length; i++) {
+      var pts = traces[i].pts;
+      bctx.beginPath();
+      bctx.moveTo(pts[0].x, pts[0].y);
+      for (var k = 1; k < pts.length; k++) bctx.lineTo(pts[k].x, pts[k].y);
+      bctx.stroke();
+
+      // a via at each end of the route
+      bctx.fillStyle = 'rgba(140,196,246,.30)';
+      for (var e = 0; e < 2; e++) {
+        var p = e ? pts[pts.length - 1] : pts[0];
+        bctx.beginPath();
+        bctx.arc(p.x, p.y, 2.4, 0, Math.PI * 2);
+        bctx.fill();
+      }
+    }
+  }
+
+  function fire(sig, now) {
+    sig.tr = traces[(Math.random() * traces.length) | 0];
+    sig.d = -TAIL;                                          // starts just off the route
+    sig.sp = rand(SPEED_MIN, SPEED_MAX);
+    sig.wait = 0;
+    sig.at = now;
+  }
 
   function build() {
     var r = hero.getBoundingClientRect();
     W = Math.round(r.width);
     H = Math.round(r.height);
     if (!W || !H) return;
-    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = Math.round(W * dpr);
     canvas.height = Math.round(H * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);   // draw in CSS px
 
-    var want = Math.min(MAX_NODES, Math.round((W * H) / DENSITY));
-    nodes.length = 0;
+    var cols = Math.ceil(W / G);
+    var rows = Math.ceil(H / G);
+    traces.length = 0;
+    var guard = 0;
+    while (traces.length < TRACES && guard++ < TRACES * 8) {
+      var t = route(cols, rows);
+      if (t) traces.push(t);
+    }
+    drawBoard();
+
+    var now = (typeof performance !== 'undefined' ? performance.now() : 0);
     signals.length = 0;
-    for (var i = 0; i < want; i++) {
-      var a = rand(0, Math.PI * 2);
-      nodes.push({
-        x: rand(0, W), y: rand(0, H),
-        vx: Math.cos(a) * DRIFT, vy: Math.sin(a) * DRIFT,
-        r: rand(1.1, 2.3),                    // varied node sizes read as organic
-        ph: rand(0, Math.PI * 2)              // phase, so nodes breathe out of sync
-      });
+    for (var s = 0; s < SIGNALS && traces.length; s++) {
+      var sig = {};
+      fire(sig, now);
+      sig.wait = rand(0, GAP_MAX);            // stagger the first firings
+      signals.push(sig);
     }
-  }
-
-  // wrap a node back in from the opposite edge so the field never empties out
-  function step(n) {
-    n.x += n.vx; n.y += n.vy;
-    if (n.x < -20) n.x = W + 20; else if (n.x > W + 20) n.x = -20;
-    if (n.y < -20) n.y = H + 20; else if (n.y > H + 20) n.y = -20;
-  }
-
-  function fire() {
-    if (nodes.length < 2) return;
-    var a = nodes[(Math.random() * nodes.length) | 0];
-    var near = [];
-    for (var i = 0; i < nodes.length; i++) {
-      var b = nodes[i];
-      if (b === a) continue;
-      var dx = b.x - a.x, dy = b.y - a.y;
-      if (dx * dx + dy * dy < LINK * LINK) near.push(b);
-    }
-    if (!near.length) return;
-    signals.push({ a: a, b: near[(Math.random() * near.length) | 0], t: 0, sp: rand(0.006, 0.014) });
   }
 
   function paint(now) {
+    var dt = last ? Math.min(now - last, 64) : 16;         // a backgrounded tab can hand
+    last = now;                                            // us a huge dt — clamp it
+
     ctx.clearRect(0, 0, W, H);
-    var i, j, a, b, dx, dy, d2, d, alpha;
+    ctx.drawImage(board, 0, 0, W, H);
 
-    // links — the closer two nodes are, the more solidly they're wired
-    ctx.lineWidth = 1;
-    for (i = 0; i < nodes.length; i++) {
-      a = nodes[i];
-      for (j = i + 1; j < nodes.length; j++) {
-        b = nodes[j];
-        dx = b.x - a.x; dy = b.y - a.y;
-        d2 = dx * dx + dy * dy;
-        if (d2 > LINK * LINK) continue;
-        d = Math.sqrt(d2);
-        alpha = (1 - d / LINK) * 0.26;
-        // links near the cursor light up
-        var mid = Math.sqrt(Math.pow((a.x + b.x) / 2 - mx, 2) + Math.pow((a.y + b.y) / 2 - my, 2));
-        if (mid < REACH) alpha += (1 - mid / REACH) * 0.34;
-        ctx.strokeStyle = 'rgba(124,192,247,' + alpha.toFixed(3) + ')';
-        ctx.beginPath();
-        ctx.moveTo(a.x, a.y);
-        ctx.lineTo(b.x, b.y);
-        ctx.stroke();
+    ctx.lineCap = 'round';
+    for (var i = 0; i < signals.length; i++) {
+      var sig = signals[i];
+      if (sig.wait > 0) { sig.wait -= dt; continue; }      // dark between firings
+
+      sig.d += sig.sp * dt;
+      var tr = sig.tr;
+      if (sig.d - TAIL > tr.total) {                       // ran off the end
+        fire(sig, now);
+        sig.wait = rand(GAP_MIN, GAP_MAX);
+        continue;
       }
-    }
 
-    // links from the cursor itself — it behaves like one more neuron
-    if (mx > -9000) {
-      for (i = 0; i < nodes.length; i++) {
-        a = nodes[i];
-        dx = a.x - mx; dy = a.y - my;
-        d = Math.sqrt(dx * dx + dy * dy);
-        if (d > REACH) continue;
-        ctx.strokeStyle = 'rgba(154,214,255,' + ((1 - d / REACH) * 0.4).toFixed(3) + ')';
-        ctx.beginPath();
-        ctx.moveTo(mx, my);
-        ctx.lineTo(a.x, a.y);
-        ctx.stroke();
+      var head = Math.min(sig.d, tr.total);
+      var tail = Math.max(sig.d - TAIL, 0);
+      if (head <= tail) continue;
+
+      // fade in as it enters the route and out as it leaves, so nothing pops
+      var fade = Math.min(1, sig.d / TAIL, (tr.total - sig.d + TAIL) / TAIL);
+      if (fade <= 0) continue;
+
+      var a = at(tr, head), b = at(tr, tail);
+      var grad = ctx.createLinearGradient(b.x, b.y, a.x, a.y);
+      grad.addColorStop(0, 'rgba(128,195,74,0)');
+      grad.addColorStop(1, 'rgba(128,195,74,' + (0.85 * fade).toFixed(3) + ')');
+
+      ctx.beginPath();
+      ctx.moveTo(b.x, b.y);
+      // follow the route between tail and head rather than cutting the corner
+      var d = 0;
+      for (var k = 0; k < tr.seg.length; k++) {
+        var segEnd = d + tr.seg[k];
+        if (segEnd > tail && d < head) {
+          var p = tr.pts[k + 1];
+          if (segEnd < head) ctx.lineTo(p.x, p.y);
+        }
+        d = segEnd;
       }
-    }
+      ctx.lineTo(a.x, a.y);
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 1.8;
+      ctx.stroke();
 
-    // nodes — slow breathing, brighter the closer the cursor is
-    for (i = 0; i < nodes.length; i++) {
-      a = nodes[i];
-      var pulse = 0.75 + Math.sin(now * 0.0013 + a.ph) * 0.25;
-      dx = a.x - mx; dy = a.y - my;
-      d = Math.sqrt(dx * dx + dy * dy);
-      var boost = d < REACH ? (1 - d / REACH) : 0;
-      ctx.beginPath();
-      ctx.arc(a.x, a.y, a.r * (1 + boost * 0.5), 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(168,220,255,' + (0.30 * pulse + boost * 0.5).toFixed(3) + ')';
-      ctx.fill();
-    }
-
-    // signals — a green spark running down a link, brand accent
-    for (i = signals.length - 1; i >= 0; i--) {
-      var s = signals[i];
-      s.t += s.sp;
-      if (s.t >= 1) { signals.splice(i, 1); continue; }
-      var x = s.a.x + (s.b.x - s.a.x) * s.t;
-      var y = s.a.y + (s.b.y - s.a.y) * s.t;
-      var fade = Math.sin(s.t * Math.PI);        // in and out, never a hard pop
-      ctx.beginPath();
-      ctx.arc(x, y, 2.2, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(128,195,74,' + (0.85 * fade).toFixed(3) + ')';
+      ctx.beginPath();                                     // the head itself
+      ctx.arc(a.x, a.y, 2.6, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(158,222,102,' + (0.95 * fade).toFixed(3) + ')';
       ctx.fill();
     }
   }
 
   function frame(now) {
-    mx += (tx - mx) * 0.12;                      // the cursor's pull glides
-    my += (ty - my) * 0.12;
-    for (var i = 0; i < nodes.length; i++) step(nodes[i]);
-    if (signals.length < 4 && Math.random() < FIRE) fire();
     paint(now);
     raf = visible ? requestAnimationFrame(frame) : null;
   }
@@ -362,31 +430,23 @@ function initMesh() {
   build();
   window.addEventListener('resize', function () {
     build();
-    if (REDUCE) paint(0);
+    if (REDUCE) { ctx.clearRect(0, 0, W, H); ctx.drawImage(board, 0, 0, W, H); }
   }, { passive: true });
 
-  if (REDUCE) { paint(0); return; }              // a still network, no drift, no cursor
+  if (REDUCE) {                                            // board only, no signals
+    ctx.clearRect(0, 0, W, H);
+    ctx.drawImage(board, 0, 0, W, H);
+    return;
+  }
 
-  hero.addEventListener('pointermove', function (e) {
-    var r = hero.getBoundingClientRect();
-    tx = e.clientX - r.left;
-    ty = e.clientY - r.top;
-    if (mx < -9000) { mx = tx; my = ty; }        // first move: don't sweep in from the corner
-  });
-  hero.addEventListener('pointerleave', function () {
-    tx = -9999; ty = -9999;
-  });
-
-  // stop drawing once the hero scrolls off screen
   if (window.IntersectionObserver) {
     new IntersectionObserver(function (entries) {
       visible = entries[0].isIntersecting;
-      if (visible && !raf) raf = requestAnimationFrame(frame);
+      if (visible && !raf) { last = 0; raf = requestAnimationFrame(frame); }
     }, { threshold: 0 }).observe(hero);
   }
   raf = requestAnimationFrame(frame);
 }
-
 
 /* -----------------------------------------------------------
    HOW WE DO IT — four steps as tabs on a process rail
@@ -445,7 +505,7 @@ function boot() {
   initScrollMarquee();
   initObservers();
   initNav();
-  initMesh();
+  initCircuit();
   initSteps();
 }
 
