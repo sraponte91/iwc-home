@@ -219,11 +219,11 @@ body {
 .iw-flo {
   max-width: 1120px; margin: 0 auto;
   padding: 3px;                                  /* the gradient ring */
-  border-radius: 24px;
+  border-radius: 4px;                            /* squared off, like the What We Do cards */
   background: linear-gradient(140deg, rgba(18,102,181,.22), rgba(128,195,74,.22));
   box-shadow: 0 34px 90px rgba(20,40,80,.13);
 }
-.iw-flo-in { border-radius: 21px; background: #fff; padding: 34px 40px 30px; }
+.iw-flo-in { border-radius: 2px; background: #fff; padding: 34px 40px 30px; }
 .iw-flo-eyebrow {
   display: inline-flex; align-items: center; gap: 9px;
   font-size: 11.5px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
@@ -315,7 +315,7 @@ body {
 .iw-flo.is-hit .iw-flo-state { color: #5c9a2e; }
 
 /* ACT 3 — the channels */
-.iw-flo-panel { border-radius: 16px; background: #f7f9fc; border: 1px solid #eaeff6; padding: 18px 20px; }
+.iw-flo-panel { border-radius: 2px; background: #f7f9fc; border: 1px solid #eaeff6; padding: 18px 20px; }
 .iw-flo-panel-head { display: flex; align-items: center; gap: 9px; padding-bottom: 14px; border-bottom: 1px solid #eaeff6; }
 .iw-flo-panel-head b { font-size: 15px; font-weight: 800; color: #143c66; }
 .iw-flo-bolt { width: 24px; height: 24px; border-radius: 7px; background: #eef6e6; display: flex; align-items: center; justify-content: center; }
@@ -378,7 +378,7 @@ body {
 .iw-step-row.is-flipped .iw-step-card { order: 1; }
 .iw-step-card {
   padding: 26px 28px 12px;
-  border-radius: 18px;
+  border-radius: 2px;
   background: #f7f8fb;
   border: 1px solid #e8ecf3;
   box-shadow: 0 18px 50px rgba(20,40,80,.07);
