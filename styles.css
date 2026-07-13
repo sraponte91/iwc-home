@@ -164,10 +164,10 @@ body {
   margin: 0;
   /* sized so each of the two authored lines holds on one row — `balance` is off
      on purpose, or it re-breaks them into four */
-  font-size: clamp(40px, 6vw, 84px);
-  line-height: 1.04;
+  font-size: clamp(36px, 5.1vw, 70px);
+  line-height: 1.06;
   font-weight: 800;
-  letter-spacing: -2.8px;
+  letter-spacing: -2.2px;
   color: #143c66;
 }
 .iw-hero-sub {
