@@ -213,6 +213,92 @@ function initNav() {
 
 
 /* -----------------------------------------------------------
+   BUILT TO BE FOUND — the work, running. Three acts on a loop:
+   the page gets built (steps light up), it waits to be asked for
+   (the radar sweeps), then it turns up (the channels fire). Only
+   runs while it's on screen; under reduced motion the finished
+   state is simply left standing.
+   ----------------------------------------------------------- */
+function initFlo() {
+  var root = document.querySelector('[data-flo]');
+  if (!root) return;
+  var steps = [].slice.call(root.querySelectorAll('[data-flo-step]'));
+  var rows = [].slice.call(root.querySelectorAll('[data-flo-row]'));
+  var state = root.querySelector('[data-flo-state]');
+  if (!steps.length || !rows.length) return;
+
+  var WAITING = 'Waiting to be asked for';
+  var HIT = 'Asked for — and found';
+
+  if (REDUCE) {
+    steps.forEach(function (s) { s.classList.add('is-on', 'is-done'); });
+    rows.forEach(function (r) { r.classList.add('is-on'); });
+    root.classList.add('is-hit');
+    if (state) state.textContent = HIT;
+    return;
+  }
+
+  var BEAT = 620;          // one beat per step / per channel
+  var LISTEN = 1500;       // the pause where the radar is just listening
+  var HOLD = 2600;         // how long the finished state rests before it resets
+
+  var timers = [];
+  var running = false;
+
+  function at(ms, fn) { timers.push(setTimeout(fn, ms)); }
+  function clear() { timers.forEach(clearTimeout); timers.length = 0; }
+
+  function reset() {
+    steps.forEach(function (s) { s.classList.remove('is-on', 'is-done'); });
+    rows.forEach(function (r) { r.classList.remove('is-on'); });
+    root.classList.remove('is-hit');
+    if (state) state.textContent = WAITING;
+  }
+
+  function cycle() {
+    if (!running) return;
+    clear();
+    reset();
+
+    var t = 500;
+    // act one: each step is done before the next begins — that IS the argument
+    steps.forEach(function (s) {
+      at(t, function () { s.classList.add('is-on'); });
+      at(t + BEAT * 0.55, function () { s.classList.add('is-done'); });
+      t += BEAT;
+    });
+
+    // act two: the page sits there, legible, waiting
+    t += LISTEN;
+    at(t, function () {
+      root.classList.add('is-hit');
+      if (state) state.textContent = HIT;
+    });
+
+    // act three: it turns up, one surface at a time
+    t += BEAT * 0.7;
+    rows.forEach(function (r) {
+      at(t, function () { r.classList.add('is-on'); });
+      t += BEAT * 0.8;
+    });
+
+    at(t + HOLD, cycle);
+  }
+
+  // only while it's on screen: no point animating to an empty room
+  if (window.IntersectionObserver) {
+    new IntersectionObserver(function (entries) {
+      var vis = entries[0].isIntersecting;
+      if (vis && !running) { running = true; cycle(); }
+      else if (!vis && running) { running = false; clear(); }
+    }, { threshold: 0.25 }).observe(root);
+  } else {
+    running = true;
+    cycle();
+  }
+}
+
+/* -----------------------------------------------------------
    BOOT
    ----------------------------------------------------------- */
 function boot() {
@@ -220,7 +306,7 @@ function boot() {
   initScrollMarquee();
   initObservers();
   initNav();
-  /* the hero and the step rows are pure CSS here — nothing to boot */
+  initFlo();
 }
 
 if (document.readyState === 'loading') {

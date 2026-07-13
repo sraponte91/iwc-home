@@ -254,15 +254,148 @@ body {
 
 /* ---------- BUILT TO BE FOUND ---------- */
 .iw-band { position: relative; background: #f7f8fb; padding: 130px 40px 120px; }
-.iw-showcase {
-  max-width: 720px; margin: 0 auto;
-  padding: 20px;
-  border-radius: 20px;
-  background: #fff;
-  border: 1px solid #e8ecf3;
-  box-shadow: 0 26px 70px rgba(20,40,80,.10);
+
+/* ---------- the work, running: three acts on a loop ---------- */
+.iw-flo {
+  max-width: 1120px; margin: 0 auto;
+  padding: 3px;                                  /* the gradient ring */
+  border-radius: 24px;
+  background: linear-gradient(140deg, rgba(18,102,181,.22), rgba(128,195,74,.22));
+  box-shadow: 0 34px 90px rgba(20,40,80,.13);
 }
-.iw-showcase .iw-illus { display: flex; justify-content: center; }
+.iw-flo-in { border-radius: 21px; background: #fff; padding: 34px 40px 30px; }
+.iw-flo-eyebrow {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-size: 11.5px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
+  color: #8a98a6;
+}
+.iw-flo-eyedot { width: 6px; height: 6px; border-radius: 50%; background: #80c34a; }
+.iw-flo-grid {
+  display: grid; grid-template-columns: 1.2fr .9fr 1.1fr; gap: 34px;
+  align-items: center; margin-top: 26px;
+}
+
+/* ACT 1 — steps */
+.iw-flo-steps { list-style: none; margin: 0; padding: 0; }
+.iw-flo-step {
+  position: relative;
+  display: flex; align-items: flex-start; gap: 15px;
+  padding: 11px 0;
+  opacity: .42;                                  /* not yet done */
+  transition: opacity .5s ease;
+}
+.iw-flo-step.is-on { opacity: 1; }
+/* the thread joining one step to the next; it colours in as the work is done */
+.iw-flo-step:not(:last-child)::after {
+  content: ""; position: absolute; left: 19px; top: 51px; bottom: 3px;
+  width: 2px; background: #e3eaf3;
+  transition: background .5s ease;
+}
+.iw-flo-step.is-on:not(:last-child)::after { background: #cfe0f2; }
+.iw-flo-tile {
+  position: relative; flex-shrink: 0;
+  width: 40px; height: 40px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  background: #eef1f6; color: #a8b6c6;
+  transition: background .45s ease, color .45s ease, transform .45s cubic-bezier(.2,.8,.3,1);
+}
+.iw-flo-step.is-on .iw-flo-tile { background: #1266b5; color: #fff; transform: scale(1.04); }
+.iw-flo-check {
+  position: absolute; top: -4px; right: -4px;
+  width: 15px; height: 15px; border-radius: 50%;
+  background: #5c9a2e; border: 2px solid #fff;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: scale(.4);
+  transition: opacity .35s ease, transform .35s cubic-bezier(.2,1.4,.4,1);
+}
+.iw-flo-step.is-done .iw-flo-check { opacity: 1; transform: scale(1); }
+.iw-flo-txt b { display: block; font-size: 15px; font-weight: 700; color: #143c66; }
+.iw-flo-txt i { display: block; font-style: normal; font-size: 13px; color: #8a98a6; margin-top: 2px; }
+
+/* ACT 2 — the radar */
+.iw-flo-radar { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+.iw-flo-rings { position: relative; width: 190px; height: 190px; }
+.iw-flo-ring {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  border: 1px solid #e3eaf3; border-radius: 50%;
+}
+.iw-flo-ring:nth-child(1) { width: 190px; height: 190px; }
+.iw-flo-ring:nth-child(2) { width: 130px; height: 130px; }
+.iw-flo-ring:nth-child(3) { width: 72px; height: 72px; }
+/* the sweep: a wedge of light going round, which is what makes it read as listening */
+.iw-flo-sweep {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: conic-gradient(from 0deg, rgba(18,102,181,.22) 0deg, rgba(18,102,181,0) 55deg, rgba(18,102,181,0) 360deg);
+  animation: iwFloSweep 4s linear infinite;
+}
+@keyframes iwFloSweep { to { transform: rotate(360deg); } }
+.iw-flo-core {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 46px; height: 46px; border-radius: 50%;
+  background: #fff; border: 1px solid #e3eaf3;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 14px rgba(20,40,80,.08);
+}
+/* the blip only exists once a query actually fires */
+.iw-flo-blip {
+  position: absolute; top: 27%; left: 62%;
+  padding: 5px 11px; border-radius: 999px;
+  background: #fff; border: 1px solid #cfe0f2;
+  box-shadow: 0 6px 18px rgba(20,40,80,.12);
+  font-size: 10.5px; font-weight: 800; letter-spacing: .6px; text-transform: uppercase;
+  color: #1266b5; white-space: nowrap;
+  opacity: 0; transform: scale(.7);
+  transition: opacity .4s ease, transform .4s cubic-bezier(.2,1.4,.4,1);
+}
+.iw-flo.is-hit .iw-flo-blip { opacity: 1; transform: scale(1); }
+.iw-flo-state {
+  font-size: 10.5px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
+  color: #a8b6c6; text-align: center; transition: color .4s ease;
+}
+.iw-flo.is-hit .iw-flo-state { color: #5c9a2e; }
+
+/* ACT 3 — the channels */
+.iw-flo-panel { border-radius: 16px; background: #f7f9fc; border: 1px solid #eaeff6; padding: 18px 20px; }
+.iw-flo-panel-head { display: flex; align-items: center; gap: 9px; padding-bottom: 14px; border-bottom: 1px solid #eaeff6; }
+.iw-flo-panel-head b { font-size: 15px; font-weight: 800; color: #143c66; }
+.iw-flo-bolt { width: 24px; height: 24px; border-radius: 7px; background: #eef6e6; display: flex; align-items: center; justify-content: center; }
+.iw-flo-when {
+  margin-left: auto; padding: 4px 10px; border-radius: 999px;
+  background: #eef1f6; font-size: 11px; font-weight: 700; color: #8a98a6;
+}
+.iw-flo-rows { list-style: none; margin: 0; padding: 0; }
+.iw-flo-row {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 13px 0;
+  opacity: .34;
+  transform: translateX(-6px);
+  transition: opacity .5s ease, transform .5s cubic-bezier(.2,.8,.3,1);
+}
+.iw-flo-row.is-on { opacity: 1; transform: none; }
+.iw-flo-rowic {
+  flex-shrink: 0; width: 28px; height: 28px; border-radius: 8px;
+  background: #e9f1fa; display: flex; align-items: center; justify-content: center;
+}
+.iw-flo-row b { display: block; font-size: 14px; font-weight: 700; color: #143c66; }
+.iw-flo-row i { display: block; font-style: normal; font-size: 12.5px; color: #8a98a6; margin-top: 1px; }
+
+.iw-flo-foot {
+  margin: 30px 0 0; padding-top: 24px; border-top: 1px solid #eef2f7;
+  text-align: center; font-size: 16px; color: #5a6b82; text-wrap: pretty;
+}
+
+@media (max-width: 980px) {
+  .iw-flo-in { padding: 26px 22px 24px; }
+  .iw-flo-grid { grid-template-columns: 1fr; gap: 34px; }
+  .iw-flo-radar { order: -1; }        /* the radar reads as the hinge; keep it up top */
+}
+@media (prefers-reduced-motion: reduce) {
+  /* no loop: the finished state says the same thing, standing still */
+  .iw-flo-sweep { animation: none; }
+  .iw-flo-step, .iw-flo-row { opacity: 1; transform: none; }
+  .iw-flo-check { opacity: 1; transform: scale(1); }
+  .iw-flo-blip { opacity: 1; transform: none; }
+}
 .iw-notes {
   display: grid; grid-template-columns: 1fr 1fr; gap: 44px;
   max-width: 900px; margin: 64px auto 0;
