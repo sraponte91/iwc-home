@@ -144,7 +144,8 @@ body {
 /* ---------- HERO ---------- */
 .iw-hero {
   position: relative;
-  padding: 158px 40px 0;   /* clears the 72px nav bar, and keeps the air */
+  /* clears the 72px nav bar; the bottom pad is back now that no card closes it off */
+  padding: 158px 40px 130px;
   background: #fff;
   overflow: hidden;
 }
@@ -176,53 +177,9 @@ body {
 }
 .iw-ms { color: #1266b5; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
 .iw-hero-cta { display: flex; justify-content: center; gap: 14px; margin-top: 36px; flex-wrap: wrap; }
-
-/* the site, floating on the wash */
-.iw-hero-card { position: relative; max-width: 940px; margin: 76px auto 0; padding: 0 0 8px; }
-.iw-hero-card-in {
-  position: relative;
-  border-radius: 18px;
-  padding: 12px;
-  /* the glow ring is the gradient again, held at low opacity */
-  background: linear-gradient(140deg, rgba(18,102,181,.16), rgba(128,195,74,.16));
-  box-shadow: 0 30px 80px rgba(20,40,80,.16);
-}
-.iw-mock { border-radius: 12px; overflow: hidden; background: #fff; }
-.iw-mock-bar { display: flex; align-items: center; gap: 7px; height: 40px; padding: 0 16px; background: #f5f7fb; border-bottom: 1px solid #eaeff6; }
-.iw-mock-dot { width: 9px; height: 9px; border-radius: 50%; background: #dce4ee; }
-.iw-mock-url { flex: 1; height: 12px; margin-left: 14px; border-radius: 6px; background: #e7ecf4; max-width: 320px; }
-.iw-mock-body { padding: 30px 34px 42px; }
-.iw-mock-hero { height: 148px; border-radius: 8px; background: linear-gradient(120deg, #eef2f7, #e6edf6); }
-.iw-mock-h { width: 42%; height: 16px; margin-top: 26px; border-radius: 4px; background: #143c66; }
-.iw-mock-l { height: 9px; margin-top: 12px; border-radius: 4.5px; background: #dbe3ee; }
-.iw-mock-btn { width: 128px; height: 36px; margin-top: 24px; border-radius: 999px; background: #80c34a; }
-
-/* the two chips that say what the page achieves */
-.iw-hero-chip {
-  position: absolute; z-index: 2;
-  display: flex; align-items: center; gap: 11px;
-  padding: 12px 16px;
-  border-radius: 14px;
-  background: rgba(255,255,255,.94);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(20,60,102,.06);
-  box-shadow: 0 10px 30px rgba(20,40,80,.14);
-}
-.iw-hero-chip b { display: block; font-size: 14px; font-weight: 800; color: #143c66; }
-.iw-hero-chip i { display: block; font-size: 12.5px; font-style: normal; color: #8a98a6; margin-top: 1px; }
-.iw-hero-chip-ic {
-  width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0;
-  background: #e9f1fa; display: flex; align-items: center; justify-content: center;
-}
-.iw-hero-chip-ic--g { background: #eef6e6; }
-.iw-hero-chip--found   { left: -26px; top: 34%; animation: iwBob 7s ease-in-out infinite; }
-.iw-hero-chip--trusted { right: -26px; top: 62%; animation: iwBobB 8s ease-in-out infinite; }
 @media (max-width: 860px) {
-  .iw-hero { padding: 140px 22px 0; }
+  .iw-hero { padding: 130px 22px 88px; }
   .iw-hero-h1 { letter-spacing: -1.6px; }
-  .iw-hero-card { margin-top: 52px; }
-  .iw-hero-chip { position: static; margin: 12px 0 0; animation: none; }
-  .iw-mock-body { padding: 20px 20px 28px; }
 }
 
 /* ---------- shared section head ---------- */
