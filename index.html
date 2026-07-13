@@ -15,54 +15,90 @@
      still contains the horizontal overflow but creates no scrollport. -->
 <div style="position:relative;width:100%;overflow-x:clip;background:#fff;">
 
-<!-- ===================== NAV ===================== -->
-<nav data-nav style="position:absolute;top:0;left:0;width:100%;height:72px;z-index:120;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:rgba(255,255,255,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:box-shadow .35s ease,background .35s ease;">
-  <a href="#top" style="display:flex;align-items:center;text-decoration:none;">
-    <img src="assets/logo.png" alt="ImageWorks Creative" style="height:34px;width:auto;display:block;"/>
+<!-- ===================== NAV — floating pill ===================== -->
+<nav data-nav class="iw-pillnav" aria-label="Main">
+  <a class="iw-pillnav-logo" href="#top">
+    <img src="assets/logo.png" alt="ImageWorks Creative"/>
   </a>
-  <!-- links + CTA travel together on the right -->
-  <div style="display:flex;align-items:center;gap:34px;">
-    <div style="display:flex;align-items:center;gap:30px;">
-      <a class="iw-link" href="#work" style="font-size:15px;font-weight:600;color:#3d464d;">Marketing</a>
-      <a class="iw-link" href="#work" style="font-size:15px;font-weight:600;color:#3d464d;">Web Plans</a>
-      <a class="iw-link" href="#work" style="font-size:15px;font-weight:600;color:#3d464d;">Branding</a>
-      <a class="iw-link" href="#work" style="font-size:15px;font-weight:600;color:#3d464d;">Our Work</a>
-      <a class="iw-link" href="#why" style="font-size:15px;font-weight:600;color:#3d464d;">About</a>
-    </div>
-    <a class="iw-btn" href="#cta" style="display:flex;align-items:center;gap:8px;height:44px;padding:0 24px;border-radius:2px;background:#80c34a;color:#fff;font-size:15px;font-weight:700;text-decoration:none;box-shadow:0 1px 2px rgba(20,40,80,.14);">Contact</a>
+  <div class="iw-pillnav-links">
+    <a class="iw-link" href="#work">Marketing</a>
+    <a class="iw-link" href="#work">Web Plans</a>
+    <a class="iw-link" href="#work">Branding</a>
+    <a class="iw-link" href="#work">Our Work</a>
+    <a class="iw-link" href="#why">About</a>
   </div>
+  <a class="iw-pillnav-cta" href="#cta">Contact</a>
 </nav>
 
-<!-- ===================== HERO — navy + drifting dot field ===================== -->
+<!-- ===================== HERO — light, air, and one enormous line ===================== -->
 <header id="top" data-hero class="iw-hero">
+  <!-- washes of brand colour bled into white; the type does the work, not the background -->
+  <div class="iw-hero-wash" aria-hidden="true"></div>
 
-  <!-- circuit traces: a static board of routed lines, with signals firing along
-       them now and then. Nothing here answers to the cursor. -->
-  <canvas class="iwh-circuit" data-circuit aria-hidden="true"></canvas>
+  <div class="iw-hero-in">
+    <span class="iw-badge"><span class="iw-badge-dot" aria-hidden="true"></span>Custom websites built for Modern Search</span>
 
-  <div class="iwh-center">
-    <h1 class="iwh-h1">Website &amp; Marketing.<br>Built to <span>Work Together.</span></h1>
-    <p class="iwh-sub">Custom websites built for <span class="iwh-ms">Modern Search</span> — designed to impress your customers and make competitors jealous.</p>
-    <a class="iw-btn iwh-cta" href="#work">Take a look under the hood<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    <h1 class="iw-hero-h1">Website &amp; Marketing.<br><span class="iw-grad">Built to work together.</span></h1>
+
+    <p class="iw-hero-sub">We design and build the site, then run the branding, content, search, and marketing that make it work — so you get found, get trusted, and get chosen.</p>
+
+    <div class="iw-hero-cta">
+      <a class="iw-pill iw-pill--solid" href="#work">Take a look under the hood
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+      <a class="iw-pill iw-pill--ghost" href="#why">See how we work</a>
+    </div>
+  </div>
+
+  <!-- the site, floating on the wash: a page that a person reads on the left and a
+       search engine reads on the right, which is the whole pitch in one object -->
+  <div class="iw-hero-card">
+    <div class="iw-hero-card-in">
+      <div class="iw-mock">
+        <div class="iw-mock-bar">
+          <span class="iw-mock-dot" style="background:#80c34a;"></span>
+          <span class="iw-mock-dot"></span>
+          <span class="iw-mock-dot"></span>
+          <span class="iw-mock-url"></span>
+        </div>
+        <div class="iw-mock-body">
+          <div class="iw-mock-hero"></div>
+          <div class="iw-mock-h"></div>
+          <div class="iw-mock-l" style="width:78%;"></div>
+          <div class="iw-mock-l" style="width:64%;"></div>
+          <div class="iw-mock-btn"></div>
+        </div>
+      </div>
+      <div class="iw-hero-chip iw-hero-chip--found">
+        <span class="iw-hero-chip-ic">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1266b5" stroke-width="1.9" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><line x1="15.5" y1="15.5" x2="21" y2="21"/></svg>
+        </span>
+        <span><b>Found</b><i>structured for Modern Search</i></span>
+      </div>
+      <div class="iw-hero-chip iw-hero-chip--trusted">
+        <span class="iw-hero-chip-ic iw-hero-chip-ic--g">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7.5 3v5.2c0 4.5-3.2 8-7.5 9.3-4.3-1.3-7.5-4.8-7.5-9.3V6z"/><polyline points="9 12 11.2 14.2 15.4 10"/></svg>
+        </span>
+        <span><b>Trusted</b><i>credible to people and to AI</i></span>
+      </div>
+    </div>
   </div>
 </header>
 
-<!-- ===================== INTRO STATEMENT (below hero) ===================== -->
-<section style="position:relative;background:#f2f5f9;padding:108px 40px 116px;overflow:hidden;">
-  <div class="iw-reveal" style="position:relative;max-width:1080px;margin:0 auto;">
-    <div class="iw-intro-grid" style="display:grid;grid-template-columns:1.05fr .95fr;gap:60px;align-items:center;">
-      <div>
-        <h2 style="margin:0 0 30px;text-align:left;font-size:44px;line-height:1.15;font-weight:800;letter-spacing:-.8px;color:#143c66;"><span style="color:#5c9a2e;">Built</span> to Be Found.<br>Designed to Be <span style="color:#5c9a2e;">Trusted</span>.</h2>
-        <p style="margin:0;font-size:16px;line-height:1.65;color:#52628a;text-wrap:pretty;max-width:520px;">ImageWorks Creative is a custom web design and digital marketing agency serving businesses across the U.S. We build <strong style="color:#5c9a2e;font-weight:700;">Drupal and WordPress</strong> websites supported by branding, content, search, and marketing systems.</p>
-        <p style="margin:16px 0 0;font-size:16px;line-height:1.65;color:#52628a;text-wrap:pretty;max-width:520px;">A modern website has to do more than look good or rank well. It has to help every audience understand who you are, what you do, and why you are credible.</p>
-        <p style="margin:16px 0 0;font-size:16px;line-height:1.65;color:#52628a;text-wrap:pretty;max-width:520px;">We build websites that are clear for people, structured for Modern Search, ready for AI, and built to keep improving.</p>
-      </div>
+<!-- ===================== BUILT TO BE FOUND ===================== -->
+<section class="iw-band">
+  <div class="iw-reveal iw-head">
+    <span class="iw-eyebrow">Why it works</span>
+    <h2 class="iw-big">Built to be found.<br><span class="iw-grad">Designed to be trusted.</span></h2>
+    <p class="iw-lead">ImageWorks Creative is a custom web design and digital marketing agency serving businesses across the U.S. We build <strong>Drupal and WordPress</strong> websites supported by branding, content, search, and marketing systems.</p>
+  </div>
 
-      <!-- One page, two readings — but one object. A scan line crosses the card:
-           ahead of it the page is rendered the way a person sees it, behind it the
-           very same page stands revealed as structure. Both layers share the same
-           coordinates, so every block lines up with its machine-readable twin. -->
-      <div class="iw-illus" style="display:flex;justify-content:center;align-self:center;">
+  <!-- One page, two readings — but one object. A scan line crosses the card:
+       ahead of it the page is rendered the way a person sees it, behind it the
+       very same page stands revealed as structure. Both layers share the same
+       coordinates, so every block lines up with its machine-readable twin. -->
+  <div class="iw-reveal iw-showcase">
+      <div class="iw-illus">
         <svg class="iw-xray" width="100%" viewBox="0 0 520 400" fill="none" xmlns="http://www.w3.org/2000/svg" style="max-width:520px;height:auto;display:block;overflow:visible;" role="img" aria-label="One web page under a moving scan line. Ahead of the line the page appears as a person sees it — image, headline, text, call to action. Behind the line the same page is revealed as machine-readable structure: metadata attached to the header, each block outlined and wired to a spine of nodes, and a verified mark on the action.">
           <defs>
             <filter id="iwXrayCard" x="-20%" y="-20%" width="140%" height="150%">
@@ -200,147 +236,124 @@
           <text class="iw-sem-label" x="400" y="368" text-anchor="middle">WHAT MACHINES READ</text>
         </svg>
       </div>
+  </div>
+
+  <!-- the two claims the graphic is making, spelled out under it -->
+  <div class="iw-reveal iw-notes">
+    <div class="iw-note">
+      <h3>Clear for people</h3>
+      <p>A modern website has to do more than look good or rank well. It has to help every audience understand who you are, what you do, and why you are credible.</p>
+    </div>
+    <div class="iw-note">
+      <h3>Structured for machines</h3>
+      <p>We build websites that are clear for people, structured for Modern Search, ready for AI, and built to keep improving.</p>
     </div>
   </div>
 </section>
 
 <!-- ===================== HOW WE DO IT (process) ===================== -->
-<!-- no overflow:hidden here either — it would trap the sticky rail inside the section -->
-<section style="position:relative;background:#ffffff;padding:112px 0 100px;">
-  <div style="max-width:1176px;margin:0 auto 42px;padding:0 40px;display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;">
-    <div>
-      <div class="iw-reveal" style="font-size:13px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:#5c9a2e;margin:0 0 14px;">Our Process</div>
-      <h2 class="iw-reveal" style="margin:0;font-size:44px;font-weight:800;letter-spacing:-.8px;color:#143c66;text-wrap:balance;">How We Do It</h2>
-      <p class="iw-reveal" style="margin:14px 0 0;font-size:20px;font-weight:500;color:#5a6b82;">Build brands that never stop getting better.</p>
-    </div>
+<section class="iw-process">
+  <div class="iw-reveal iw-head">
+    <span class="iw-eyebrow">Our process</span>
+    <h2 class="iw-big">How we<br><span class="iw-grad">do it.</span></h2>
+    <p class="iw-lead">Four steps, in order. Each one only works because the one before it is already right.</p>
   </div>
 
-  <!-- The four steps are a sequence, so the tab strip is built as a rail: each
-       step is a station, and the green line runs up to the one you're on. The
-       numbering earns its place — it's the order of the work, not decoration. -->
-  <!-- The process read by descending it: the rail on the left stays put and fills
-       as you go, while each step's panel scrolls past. The scroll IS the sequence,
-       so there is nothing to click — though the rail is clickable if you'd rather. -->
-  <div class="iw-flow" data-flow>
-    <nav class="iw-flow-nav" aria-label="Our process">
-      <ul class="iw-flow-list">
-        <li>
-          <button type="button" class="iw-flow-item is-active" data-flow-to="0">
-            <span class="iw-flow-dot" aria-hidden="true"></span>
-            <span class="iw-flow-n">01</span>
-            <span class="iw-flow-l">Website + Brand</span>
-          </button>
-        </li>
-        <li>
-          <button type="button" class="iw-flow-item" data-flow-to="1">
-            <span class="iw-flow-dot" aria-hidden="true"></span>
-            <span class="iw-flow-n">02</span>
-            <span class="iw-flow-l">Content</span>
-          </button>
-        </li>
-        <li>
-          <button type="button" class="iw-flow-item" data-flow-to="2">
-            <span class="iw-flow-dot" aria-hidden="true"></span>
-            <span class="iw-flow-n">03</span>
-            <span class="iw-flow-l">Marketing</span>
-          </button>
-        </li>
-        <li>
-          <button type="button" class="iw-flow-item" data-flow-to="3">
-            <span class="iw-flow-dot" aria-hidden="true"></span>
-            <span class="iw-flow-n">04</span>
-            <span class="iw-flow-l">Evolve</span>
-          </button>
-        </li>
-        <span class="iw-flow-rail" aria-hidden="true"></span>
-        <span class="iw-flow-fill" data-flow-fill aria-hidden="true"></span>
-      </ul>
-    </nav>
-
-    <div class="iw-flow-panels">
-      <article class="iw-flow-panel is-active" data-flow-panel id="iw-flow-1">
-        <div class="iw-flow-copy">
-          <div class="iw-steps-eyebrow">Website + Brand</div>
-          <h3 class="iw-steps-title">Build the Brand People Remember</h3>
-          <p class="iw-steps-body">Strong marketing cannot save a weak website. If your website looks outdated, feels generic, uses thin content, frustrates mobile users, or lacks a clear path to conversion, the foundation is failing.</p>
-          <p class="iw-steps-body">First, we sharpen the <strong>brand</strong> — logo, colors, visuals, language, and presentation. Then we build a modern website that earns <strong>trust</strong> fast, supports <strong>Modern Search</strong>, and turns visitors into customers.</p>
-        </div>
-        <div class="iw-flow-out">
+  <div class="iw-steps-rows">
+    <div class="iw-reveal iw-step-row">
+      <div class="iw-step-copy">
+        <div class="iw-steps-eyebrow">Step 01 — Website + Brand</div>
+        <h3 class="iw-steps-title">Build the Brand People Remember</h3>
+        <p class="iw-steps-body">Strong marketing cannot save a weak website. If your website looks outdated, feels generic, uses thin content, frustrates mobile users, or lacks a clear path to conversion, the foundation is failing.</p>
+        <p class="iw-steps-body">First, we sharpen the <strong>brand</strong> — logo, colors, visuals, language, and presentation. Then we build a modern website that earns <strong>trust</strong> fast, supports <strong>Modern Search</strong>, and turns visitors into customers.</p>
+      </div>
+      <div class="iw-step-card">
+        <div class="iw-step-card-head">What you get</div>
+        <div class="iw-step-card-body">
           <ul class="iw-steps-list">
-          <!-- palette: the brand's visual language -->
-          <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 1 1 9-9c0 2-1.6 2.6-3 2.6h-1.4a2 2 0 0 0-1.3 3.5 1.8 1.8 0 0 1-1.2 3z"/><circle cx="8.5" cy="10" r="1.1" fill="#5c9a2e" stroke="none"/><circle cx="12" cy="7.5" r="1.1" fill="#5c9a2e" stroke="none"/><circle cx="15.5" cy="10" r="1.1" fill="#5c9a2e" stroke="none"/></svg></span><span>A sharpened brand — logo, colors, visuals, language</span></li>
-          <!-- shield: trust, earned fast -->
-          <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7.5 3v5.2c0 4.5-3.2 8-7.5 9.3-4.3-1.3-7.5-4.8-7.5-9.3V6z"/><polyline points="9 12 11.2 14.2 15.4 10"/></svg></span><span>A modern website that earns trust fast</span></li>
-          <!-- magnifier: Modern Search -->
-          <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><line x1="15.5" y1="15.5" x2="21" y2="21"/></svg></span><span>Built to support Modern Search</span></li>
-          <!-- funnel: visitors narrowing into customers -->
-          <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 5h17l-6.6 7.8v6.4l-3.8 2v-8.4z"/></svg></span><span>A path that turns visitors into customers</span></li>
-          </ul>
+            <!-- palette: the brand's visual language -->
+            <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 1 1 9-9c0 2-1.6 2.6-3 2.6h-1.4a2 2 0 0 0-1.3 3.5 1.8 1.8 0 0 1-1.2 3z"/><circle cx="8.5" cy="10" r="1.1" fill="#5c9a2e" stroke="none"/><circle cx="12" cy="7.5" r="1.1" fill="#5c9a2e" stroke="none"/><circle cx="15.5" cy="10" r="1.1" fill="#5c9a2e" stroke="none"/></svg></span><span>A sharpened brand — logo, colors, visuals, language</span></li>
+            <!-- shield: trust, earned fast -->
+            <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7.5 3v5.2c0 4.5-3.2 8-7.5 9.3-4.3-1.3-7.5-4.8-7.5-9.3V6z"/><polyline points="9 12 11.2 14.2 15.4 10"/></svg></span><span>A modern website that earns trust fast</span></li>
+            <!-- magnifier: Modern Search -->
+            <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><line x1="15.5" y1="15.5" x2="21" y2="21"/></svg></span><span>Built to support Modern Search</span></li>
+            <!-- funnel: visitors narrowing into customers -->
+            <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 5h17l-6.6 7.8v6.4l-3.8 2v-8.4z"/></svg></span><span>A path that turns visitors into customers</span></li>
+            </ul>
         </div>
-      </article>
+      </div>
+    </div>
 
-      <article class="iw-flow-panel" data-flow-panel id="iw-flow-2">
-        <div class="iw-flow-copy">
-          <div class="iw-steps-eyebrow">Content</div>
-          <h3 class="iw-steps-title">Build Content That Does Real Work</h3>
-          <p class="iw-steps-body">Once the foundation is right, the content has to do more than fill pages or chase keywords. It should <strong>educate</strong>, build trust, show expertise, support search, strengthen local signals, position the business better, and make it easier to <strong>choose</strong>.</p>
-          <p class="iw-steps-body">Old content written 2+ years ago won't work today.</p>
-        </div>
-        <div class="iw-flow-out">
+    <div class="iw-reveal iw-step-row is-flipped">
+      <div class="iw-step-copy">
+        <div class="iw-steps-eyebrow">Step 02 — Content</div>
+        <h3 class="iw-steps-title">Build Content That Does Real Work</h3>
+        <p class="iw-steps-body">Once the foundation is right, the content has to do more than fill pages or chase keywords. It should <strong>educate</strong>, build trust, show expertise, support search, strengthen local signals, position the business better, and make it easier to <strong>choose</strong>.</p>
+        <p class="iw-steps-body">Old content written 2+ years ago won't work today.</p>
+      </div>
+      <div class="iw-step-card">
+        <div class="iw-step-card-head">What you get</div>
+        <div class="iw-step-card-body">
           <ul class="iw-steps-list">
-          <!-- open book: content that teaches -->
-          <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7.5v12"/><path d="M3 5.5h5.5A3.5 3.5 0 0 1 12 9v10.5a3 3 0 0 0-3-3H3z"/><path d="M21 5.5h-5.5A3.5 3.5 0 0 0 12 9v10.5a3 3 0 0 1 3-3h6z"/></svg></span><span>Content that educates and builds trust</span></li>
-          <!-- medal: expertise, made visible -->
-          <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5.5"/><path d="M8.6 13.7L7 21l5-2.6L17 21l-1.6-7.3"/></svg></span><span>Expertise made visible</span></li>
-          <!-- map pin: local signals -->
-          <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.5s7-6.2 7-11.3A7 7 0 1 0 5 10.2c0 5.1 7 11.3 7 11.3z"/><circle cx="12" cy="10" r="2.6"/></svg></span><span>Stronger local signals</span></li>
-          <!-- pointer: the moment someone chooses you -->
-          <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.2l12.5 7.6-5.6 1.4 3.2 5.6-2.6 1.5-3.2-5.6-4.3 3.9z"/></svg></span><span>A business that is easier to choose</span></li>
-          </ul>
+            <!-- open book: content that teaches -->
+            <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7.5v12"/><path d="M3 5.5h5.5A3.5 3.5 0 0 1 12 9v10.5a3 3 0 0 0-3-3H3z"/><path d="M21 5.5h-5.5A3.5 3.5 0 0 0 12 9v10.5a3 3 0 0 1 3-3h6z"/></svg></span><span>Content that educates and builds trust</span></li>
+            <!-- medal: expertise, made visible -->
+            <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5.5"/><path d="M8.6 13.7L7 21l5-2.6L17 21l-1.6-7.3"/></svg></span><span>Expertise made visible</span></li>
+            <!-- map pin: local signals -->
+            <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.5s7-6.2 7-11.3A7 7 0 1 0 5 10.2c0 5.1 7 11.3 7 11.3z"/><circle cx="12" cy="10" r="2.6"/></svg></span><span>Stronger local signals</span></li>
+            <!-- pointer: the moment someone chooses you -->
+            <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.2l12.5 7.6-5.6 1.4 3.2 5.6-2.6 1.5-3.2-5.6-4.3 3.9z"/></svg></span><span>A business that is easier to choose</span></li>
+            </ul>
         </div>
-      </article>
+      </div>
+    </div>
 
-      <article class="iw-flow-panel" data-flow-panel id="iw-flow-3">
-        <div class="iw-flow-copy">
-          <div class="iw-steps-eyebrow">Marketing</div>
-          <h3 class="iw-steps-title">The Right Marketing, for the Right Audience</h3>
-          <p class="iw-steps-body">Once the brand, website, and content are strong, we put the right marketing and message in front of the people who actually matter to your business.</p>
-          <p class="iw-steps-body">For some businesses, that means more <strong>visibility</strong>, leads, reviews, ads, and local reach. For others, it means stronger positioning, <strong>credibility</strong>, sales support, recruiting, and a brand that helps win bigger opportunities.</p>
-        </div>
-        <div class="iw-flow-out">
+    <div class="iw-reveal iw-step-row">
+      <div class="iw-step-copy">
+        <div class="iw-steps-eyebrow">Step 03 — Marketing</div>
+        <h3 class="iw-steps-title">The Right Marketing, for the Right Audience</h3>
+        <p class="iw-steps-body">Once the brand, website, and content are strong, we put the right marketing and message in front of the people who actually matter to your business.</p>
+        <p class="iw-steps-body">For some businesses, that means more <strong>visibility</strong>, leads, reviews, ads, and local reach. For others, it means stronger positioning, <strong>credibility</strong>, sales support, recruiting, and a brand that helps win bigger opportunities.</p>
+      </div>
+      <div class="iw-step-card">
+        <div class="iw-step-card-head">What you get</div>
+        <div class="iw-step-card-body">
           <ul class="iw-steps-list">
-          <!-- eye: being seen -->
-          <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.8-6.5 10-6.5S22 12 22 12s-3.8 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="2.6"/></svg></span><span>More visibility, leads, and reviews</span></li>
-          <!-- megaphone: ads carrying the message out -->
-          <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h2.8L14 5v14l-7.2-4.5H4a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1z"/><path d="M17.5 9a4 4 0 0 1 0 6"/></svg></span><span>Ads and local reach</span></li>
-          <!-- target: positioning -->
-          <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1.2" fill="#5c9a2e" stroke="none"/></svg></span><span>Stronger positioning and credibility</span></li>
-          <!-- two people: sales support and recruiting -->
-          <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.4"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16.5 5.2a3.4 3.4 0 0 1 0 5.6"/><path d="M18 14.4a6.5 6.5 0 0 1 3.5 5.6"/></svg></span><span>Sales support and recruiting</span></li>
-          </ul>
+            <!-- eye: being seen -->
+            <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.8-6.5 10-6.5S22 12 22 12s-3.8 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="2.6"/></svg></span><span>More visibility, leads, and reviews</span></li>
+            <!-- megaphone: ads carrying the message out -->
+            <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h2.8L14 5v14l-7.2-4.5H4a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1z"/><path d="M17.5 9a4 4 0 0 1 0 6"/></svg></span><span>Ads and local reach</span></li>
+            <!-- target: positioning -->
+            <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1.2" fill="#5c9a2e" stroke="none"/></svg></span><span>Stronger positioning and credibility</span></li>
+            <!-- two people: sales support and recruiting -->
+            <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.4"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16.5 5.2a3.4 3.4 0 0 1 0 5.6"/><path d="M18 14.4a6.5 6.5 0 0 1 3.5 5.6"/></svg></span><span>Sales support and recruiting</span></li>
+            </ul>
         </div>
-      </article>
+      </div>
+    </div>
 
-      <article class="iw-flow-panel" data-flow-panel id="iw-flow-4">
-        <div class="iw-flow-copy">
-          <div class="iw-steps-eyebrow">Evolve</div>
-          <h3 class="iw-steps-title">Keep Improving. Nothing Is Ever Done, Done.</h3>
-          <p class="iw-steps-body">People change. Search changes. AI changes. Competitors change. Your services, offers, reviews, photos, pages, and customer behavior all change too.</p>
-          <p class="iw-steps-body">We start with a strong <strong>strategy</strong>, then improve from real <strong>data</strong>: calls, forms, analytics, heatmaps, rankings, conversions, and how customers actually use the site.</p>
-        </div>
-        <div class="iw-flow-out">
+    <div class="iw-reveal iw-step-row is-flipped">
+      <div class="iw-step-copy">
+        <div class="iw-steps-eyebrow">Step 04 — Evolve</div>
+        <h3 class="iw-steps-title">Keep Improving. Nothing Is Ever Done, Done.</h3>
+        <p class="iw-steps-body">People change. Search changes. AI changes. Competitors change. Your services, offers, reviews, photos, pages, and customer behavior all change too.</p>
+        <p class="iw-steps-body">We start with a strong <strong>strategy</strong>, then improve from real <strong>data</strong>: calls, forms, analytics, heatmaps, rankings, conversions, and how customers actually use the site.</p>
+      </div>
+      <div class="iw-step-card">
+        <div class="iw-step-card-head">What you get</div>
+        <div class="iw-step-card-body">
           <ul class="iw-steps-list">
-          <!-- phone: the call that actually came in -->
-          <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3.5l2.6.6 1 3.6-2.1 1.6a12.5 12.5 0 0 0 6.2 6.2l1.6-2.1 3.6 1 .6 2.6a1.8 1.8 0 0 1-1.9 2.2C10.4 20.6 3.4 13.6 4.8 5.4A1.8 1.8 0 0 1 7 3.5z"/></svg></span><span>Calls, forms, and conversions tracked</span></li>
-          <!-- bars: analytics actually read -->
-          <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="20.5" x2="21" y2="20.5"/><line x1="6.5" y1="20.5" x2="6.5" y2="12"/><line x1="12" y1="20.5" x2="12" y2="4.5"/><line x1="17.5" y1="20.5" x2="17.5" y2="9"/></svg></span><span>Analytics and heatmaps read, not just collected</span></li>
-          <!-- climbing line: rankings over time -->
-          <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 6.5"/><polyline points="15 6.5 21 6.5 21 12.5"/></svg></span><span>Rankings watched over time</span></li>
-          <!-- loop: a strategy that keeps going round -->
-          <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12a8.5 8.5 0 1 1-2.6-6.1"/><polyline points="20.5 3.5 20.5 8.5 15.5 8.5"/></svg></span><span>A strategy that adapts as things change</span></li>
-          </ul>
+            <!-- phone: the call that actually came in -->
+            <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3.5l2.6.6 1 3.6-2.1 1.6a12.5 12.5 0 0 0 6.2 6.2l1.6-2.1 3.6 1 .6 2.6a1.8 1.8 0 0 1-1.9 2.2C10.4 20.6 3.4 13.6 4.8 5.4A1.8 1.8 0 0 1 7 3.5z"/></svg></span><span>Calls, forms, and conversions tracked</span></li>
+            <!-- bars: analytics actually read -->
+            <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="20.5" x2="21" y2="20.5"/><line x1="6.5" y1="20.5" x2="6.5" y2="12"/><line x1="12" y1="20.5" x2="12" y2="4.5"/><line x1="17.5" y1="20.5" x2="17.5" y2="9"/></svg></span><span>Analytics and heatmaps read, not just collected</span></li>
+            <!-- climbing line: rankings over time -->
+            <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 6.5"/><polyline points="15 6.5 21 6.5 21 12.5"/></svg></span><span>Rankings watched over time</span></li>
+            <!-- loop: a strategy that keeps going round -->
+            <li><span class="iw-steps-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5c9a2e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12a8.5 8.5 0 1 1-2.6-6.1"/><polyline points="20.5 3.5 20.5 8.5 15.5 8.5"/></svg></span><span>A strategy that adapts as things change</span></li>
+            </ul>
         </div>
-      </article>
+      </div>
     </div>
   </div>
 </section>
