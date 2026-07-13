@@ -448,51 +448,52 @@ function initCircuit() {
   raf = requestAnimationFrame(frame);
 }
 
+
 /* -----------------------------------------------------------
-   HOW WE DO IT — four steps as tabs on a process rail
+   HOW WE DO IT — the rail tracks whichever step is crossing the
+   middle of the viewport. The page scroll is the progress bar;
+   the rail is clickable as a shortcut, not as the way in.
    ----------------------------------------------------------- */
-function initSteps() {
-  var root = document.querySelector('[data-steps]');
+function initFlow() {
+  var root = document.querySelector('[data-flow]');
   if (!root) return;
-  var tabs = [].slice.call(root.querySelectorAll('.iw-steps-tab'));
-  var panels = [].slice.call(root.querySelectorAll('.iw-steps-panel'));
-  var fill = root.querySelector('[data-steps-fill]');
-  if (!tabs.length || tabs.length !== panels.length) return;
+  var items = [].slice.call(root.querySelectorAll('.iw-flow-item'));
+  var panels = [].slice.call(root.querySelectorAll('[data-flow-panel]'));
+  var fill = root.querySelector('[data-flow-fill]');
+  if (!items.length || items.length !== panels.length) return;
 
-  var current = 0;
+  var current = -1;
 
-  function select(i, focus) {
-    if (i < 0 || i >= tabs.length) return;
+  function select(i) {
+    if (i === current) return;
     current = i;
-    tabs.forEach(function (t, k) {
-      var on = k === i;
-      t.classList.toggle('is-active', on);
-      t.classList.toggle('is-done', k <= i);   // the rail fills up to where you are
-      t.setAttribute('aria-selected', on ? 'true' : 'false');
-      t.tabIndex = on ? 0 : -1;                // one tab stop for the whole set
-      // no [hidden] here: it would pull the panel out of the grid and let the
-      // box resize per step. CSS visibility:hidden keeps the cell — and still
-      // takes the panel out of the tab order and the accessibility tree.
-      panels[k].classList.toggle('is-active', on);
+    items.forEach(function (it, k) {
+      it.classList.toggle('is-active', k === i);
+      it.classList.toggle('is-done', k <= i);      // the rail fills up to where you are
+      it.setAttribute('aria-current', k === i ? 'step' : 'false');
     });
-    // the line lands exactly on the active station (each station sits mid-tab)
-    if (fill) fill.style.width = (12.5 + i * 25) + '%';
-    if (focus) tabs[i].focus();
+    panels.forEach(function (p, k) { p.classList.toggle('is-active', k === i); });
+    // the fill is a fraction of the run between the first and last node
+    if (fill) fill.style.setProperty('--p', items.length > 1 ? i / (items.length - 1) : 0);
   }
 
-  tabs.forEach(function (tab, i) {
-    tab.addEventListener('click', function () { select(i); });
+  items.forEach(function (it, i) {
+    it.addEventListener('click', function () {
+      panels[i].scrollIntoView({ behavior: REDUCE ? 'auto' : 'smooth', block: 'center' });
+    });
   });
 
-  root.querySelector('.iw-steps-tabs').addEventListener('keydown', function (e) {
-    var k = e.key;
-    if (k === 'ArrowRight' || k === 'ArrowDown') { select((current + 1) % tabs.length, true); }
-    else if (k === 'ArrowLeft' || k === 'ArrowUp') { select((current - 1 + tabs.length) % tabs.length, true); }
-    else if (k === 'Home') { select(0, true); }
-    else if (k === 'End') { select(tabs.length - 1, true); }
-    else return;
-    e.preventDefault();
-  });
+  // a band across the middle of the viewport: whichever panel is in it, wins
+  if (window.IntersectionObserver) {
+    var io = new IntersectionObserver(function (entries) {
+      var best = null;
+      entries.forEach(function (e) {
+        if (e.isIntersecting && (!best || e.intersectionRatio > best.intersectionRatio)) best = e;
+      });
+      if (best) select(panels.indexOf(best.target));
+    }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+    panels.forEach(function (p) { io.observe(p); });
+  }
 
   select(0);
 }
@@ -506,7 +507,7 @@ function boot() {
   initObservers();
   initNav();
   initCircuit();
-  initSteps();
+  initFlow();
 }
 
 if (document.readyState === 'loading') {
