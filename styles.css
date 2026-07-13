@@ -139,19 +139,7 @@ body {
 }
 .iw-pill--solid { background: #80c34a; color: #fff; box-shadow: 0 8px 22px rgba(128,195,74,.36); }
 .iw-pill--solid:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(128,195,74,.44); }
-.iw-pill--ghost { background: #eef1f6; color: #143c66; }
-.iw-pill--ghost:hover { transform: translateY(-2px); background: #e4e9f1; }
 
-/* the badge that sits above the headline */
-.iw-badge {
-  display: inline-flex; align-items: center; gap: 9px;
-  padding: 9px 18px; border-radius: 999px;
-  background: rgba(255,255,255,.8);
-  border: 1px solid rgba(20,60,102,.08);
-  box-shadow: 0 2px 10px rgba(20,40,80,.05);
-  font-size: 14px; font-weight: 600; color: #52628a;
-}
-.iw-badge-dot { width: 7px; height: 7px; border-radius: 50%; background: #80c34a; }
 
 /* ---------- HERO ---------- */
 .iw-hero {
@@ -172,7 +160,7 @@ body {
 }
 .iw-hero-in { position: relative; max-width: 1140px; margin: 0 auto; text-align: center; }
 .iw-hero-h1 {
-  margin: 26px 0 0;
+  margin: 0;
   /* sized so each of the two authored lines holds on one row — `balance` is off
      on purpose, or it re-breaks them into four */
   font-size: clamp(40px, 6vw, 84px);
@@ -186,6 +174,7 @@ body {
   font-size: 19px; line-height: 1.6; font-weight: 500; color: #5a6b82;
   text-wrap: pretty;
 }
+.iw-ms { color: #1266b5; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
 .iw-hero-cta { display: flex; justify-content: center; gap: 14px; margin-top: 36px; flex-wrap: wrap; }
 
 /* the site, floating on the wash */
@@ -249,6 +238,9 @@ body {
   line-height: 1.02; font-weight: 800; letter-spacing: -2.4px;
   color: #143c66; text-wrap: balance;
 }
+/* headlines short enough to hold one line get to keep it — the min size is
+   dropped so it still won't break on a narrow phone */
+.iw-big--single { white-space: nowrap; font-size: clamp(32px, 5.6vw, 76px); }
 .iw-lead {
   margin: 26px auto 0; max-width: 640px;
   font-size: 18px; line-height: 1.65; font-weight: 500; color: #5a6b82;
