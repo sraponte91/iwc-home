@@ -199,11 +199,11 @@ body {
   line-height: 1.02; font-weight: 800; letter-spacing: -2.4px;
   color: #143c66; text-wrap: balance;
 }
-/* headlines short enough to hold one line get to keep it — the min size is
-   dropped so it still won't break on a narrow phone */
-.iw-big--single { white-space: nowrap; font-size: clamp(32px, 5.6vw, 76px); }
-/* two-line heads run smaller: at 76px a second line starts shouting over the
-   graphic it's meant to introduce */
+/* a headline short enough to hold one line gets to keep it — size is left to
+   the size modifier, so the two never fight over font-size */
+.iw-big--single { white-space: nowrap; }
+/* section heads run smaller than the hero: at 76px they start shouting over the
+   graphic they exist to introduce */
 .iw-big--sm { font-size: clamp(32px, 4.2vw, 54px); letter-spacing: -1.6px; line-height: 1.1; }
 .iw-lead {
   margin: 26px auto 0; max-width: 640px;
