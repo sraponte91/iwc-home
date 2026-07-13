@@ -199,8 +199,11 @@ function initObservers() {
 function initNav() {
   var nav = document.querySelector('[data-nav]');
   if (!nav) return;
-  // the pill firms up once you leave the top; the look itself lives in CSS
-  function onScroll() { nav.classList.toggle('is-stuck', (window.scrollY || 0) > 12); }
+  function onScroll() {
+    var y = window.scrollY || 0;
+    nav.style.boxShadow = y > 12 ? '0 6px 24px rgba(15,36,64,.10)' : '0 0 0 rgba(0,0,0,0)';
+    nav.style.background = y > 12 ? 'rgba(255,255,255,.94)' : 'rgba(255,255,255,.86)';
+  }
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 }

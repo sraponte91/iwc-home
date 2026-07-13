@@ -15,19 +15,22 @@
      still contains the horizontal overflow but creates no scrollport. -->
 <div style="position:relative;width:100%;overflow-x:clip;background:#fff;">
 
-<!-- ===================== NAV — floating pill ===================== -->
-<nav data-nav class="iw-pillnav" aria-label="Main">
-  <a class="iw-pillnav-logo" href="#top">
-    <img src="assets/logo.png" alt="ImageWorks Creative"/>
+<!-- ===================== NAV ===================== -->
+<nav data-nav style="position:absolute;top:0;left:0;width:100%;height:72px;z-index:120;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:rgba(255,255,255,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:box-shadow .35s ease,background .35s ease;">
+  <a href="#top" style="display:flex;align-items:center;text-decoration:none;">
+    <img src="assets/logo.png" alt="ImageWorks Creative" style="height:34px;width:auto;display:block;"/>
   </a>
-  <div class="iw-pillnav-links">
-    <a class="iw-link" href="#work">Marketing</a>
-    <a class="iw-link" href="#work">Web Plans</a>
-    <a class="iw-link" href="#work">Branding</a>
-    <a class="iw-link" href="#work">Our Work</a>
-    <a class="iw-link" href="#why">About</a>
+  <!-- links + CTA travel together on the right -->
+  <div style="display:flex;align-items:center;gap:34px;">
+    <div style="display:flex;align-items:center;gap:30px;">
+      <a class="iw-link" href="#work" style="font-size:15px;font-weight:600;color:#3d464d;">Marketing</a>
+      <a class="iw-link" href="#work" style="font-size:15px;font-weight:600;color:#3d464d;">Web Plans</a>
+      <a class="iw-link" href="#work" style="font-size:15px;font-weight:600;color:#3d464d;">Branding</a>
+      <a class="iw-link" href="#work" style="font-size:15px;font-weight:600;color:#3d464d;">Our Work</a>
+      <a class="iw-link" href="#why" style="font-size:15px;font-weight:600;color:#3d464d;">About</a>
+    </div>
+    <a class="iw-btn" href="#cta" style="display:flex;align-items:center;gap:8px;height:44px;padding:0 24px;border-radius:2px;background:#80c34a;color:#fff;font-size:15px;font-weight:700;text-decoration:none;box-shadow:0 1px 2px rgba(20,40,80,.14);">Contact</a>
   </div>
-  <a class="iw-pillnav-cta" href="#cta">Contact</a>
 </nav>
 
 <!-- ===================== HERO — light, air, and one enormous line ===================== -->
