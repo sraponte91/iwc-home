@@ -1,0 +1,331 @@
+/* ===========================================================
+   ImageWorks Creative — Home
+   Plain CSS. No build step. Edit freely.
+   =========================================================== */
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: #fff;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: #1f2b3e;
+}
+::selection { background: rgba(128, 195, 74, .28); }
+
+/* ---------- keyframes ---------- */
+@keyframes iwFloat   { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-16px)} }
+@keyframes iwFloatB  { 0%,100%{transform:translateY(0)} 50%{transform:translateY(12px)} }
+@keyframes iwDrift   { 0%{transform:translate(0,0) scale(1)} 33%{transform:translate(46px,-34px) scale(1.12)} 66%{transform:translate(-34px,26px) scale(.94)} 100%{transform:translate(0,0) scale(1)} }
+@keyframes iwDriftB  { 0%{transform:translate(0,0) scale(1)} 50%{transform:translate(-40px,30px) scale(1.1)} 100%{transform:translate(0,0) scale(1)} }
+@keyframes iwMarquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+@keyframes iwMarqueeR{ from{transform:translateX(-50%)} to{transform:translateX(0)} }
+@keyframes iwPulse   { 0%{transform:scale(.6);opacity:.6} 100%{transform:scale(2.4);opacity:0} }
+@keyframes iwSpin    { to{transform:rotate(360deg)} }
+@keyframes iwFlow    { from{background-position:0 0} to{background-position:0 12px} }
+@keyframes iwNodePulse { 0%,100%{opacity:1;transform:translateX(-50%) scale(1)} 50%{opacity:.35;transform:translateX(-50%) scale(1.5)} }
+@keyframes iwBob     { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
+@keyframes iwBobB    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(7px)} }
+@keyframes iwTileA   { 0%,100%{transform:translate(0,0) rotate(0deg)} 50%{transform:translate(0,-14px) rotate(-.7deg)} }
+@keyframes iwTileB   { 0%,100%{transform:translate(0,0) rotate(0deg)} 50%{transform:translate(0,13px) rotate(.7deg)} }
+@keyframes iwTileC   { 0%,100%{transform:translate(0,0)} 50%{transform:translate(0,-11px)} }
+@keyframes iwTileD   { 0%,100%{transform:translate(0,0)} 50%{transform:translate(0,12px)} }
+@keyframes iwAmb1    { 0%{transform:translate(0,0) rotate(0deg)} 50%{transform:translate(34px,-30px) rotate(4deg)} 100%{transform:translate(0,0) rotate(0deg)} }
+@keyframes iwAmb2    { 0%{transform:translate(0,0) rotate(0deg)} 50%{transform:translate(-40px,28px) rotate(-5deg)} 100%{transform:translate(0,0) rotate(0deg)} }
+@keyframes iwAmb3    { 0%{transform:translate(0,0) rotate(0deg)} 50%{transform:translate(26px,32px) rotate(3deg)} 100%{transform:translate(0,0) rotate(0deg)} }
+@keyframes iwBlob    { 0%{transform:translate(0,0) scale(1)} 50%{transform:translate(30px,-26px) scale(1.12)} 100%{transform:translate(0,0) scale(1)} }
+@keyframes iwBlobB   { 0%{transform:translate(0,0) scale(1)} 50%{transform:translate(-34px,30px) scale(1.1)} 100%{transform:translate(0,0) scale(1)} }
+@keyframes iwGlowPulse { 0%,100%{opacity:.35} 50%{opacity:.85} }
+@keyframes iwPanelFade { 0%,100%{opacity:.5} 50%{opacity:.95} }
+@keyframes iwPart1   { 0%{transform:translate(0,0);opacity:.2} 50%{transform:translate(18px,-46px);opacity:.9} 100%{transform:translate(0,0);opacity:.2} }
+@keyframes iwPart2   { 0%{transform:translate(0,0);opacity:.25} 50%{transform:translate(-22px,-38px);opacity:.85} 100%{transform:translate(0,0);opacity:.25} }
+@keyframes iwGridShift { 0%{background-position:0 0} 100%{background-position:46px 46px} }
+
+/* ---------- scroll reveal ---------- */
+.iw-reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity .85s cubic-bezier(.16,.84,.44,1), transform .85s cubic-bezier(.16,.84,.44,1);
+}
+.iw-reveal.in { opacity: 1; transform: none; }
+
+/* ---------- marquee ---------- */
+.iw-marq {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.iw-track { display: flex; width: max-content; }
+.iw-marq:hover .iw-track { animation-play-state: paused; }
+
+/* ---------- links & hovers ---------- */
+.iw-link { position: relative; text-decoration: none; }
+.iw-link::after {
+  content: ""; position: absolute; left: 0; bottom: -4px;
+  height: 2px; width: 100%; background: #80c34a;
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .3s cubic-bezier(.16,.84,.44,1);
+}
+.iw-link:hover::after { transform: scaleX(1); }
+/* CTA links: underline matches the text color instead of the default green */
+.iw-cta-link::after { background: currentColor; }
+
+.iw-card { transition: transform .4s cubic-bezier(.16,.84,.44,1), box-shadow .4s cubic-bezier(.16,.84,.44,1); }
+.iw-work { transition: transform .45s cubic-bezier(.16,.84,.44,1), box-shadow .45s cubic-bezier(.16,.84,.44,1); }
+.iw-work:hover { transform: translateY(-8px); box-shadow: 0 14px 36px rgba(20,40,80,.16); }
+
+.iw-btn { transition: transform .25s cubic-bezier(.16,.84,.44,1), box-shadow .25s ease, filter .25s ease; }
+.iw-btn:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(20,40,80,.18); filter: brightness(1.04); }
+
+.iw-social { transition: background .25s ease; }
+.iw-social:hover { background: #80c34a; }
+
+.iw-ghost { transition: transform .25s ease, background .25s ease, border-color .25s ease; }
+.iw-ghost:hover { transform: translateY(-3px); background: rgba(18,102,181,.06); border-color: rgba(18,102,181,.5); }
+
+.iw-partner { opacity: .92; transition: opacity .4s ease, transform .4s ease; }
+.iw-partner:hover { opacity: 1; transform: scale(1.06); }
+
+.iw-seg { transition: color .3s ease; }
+
+/* tabbed panels: shown/hidden by JS via [hidden] */
+[hidden] { display: none !important; }
+
+
+/* shared blue -> navy gradient behind "What We Do" + "Why ImageWorks" */
+.iw-blueband {
+  position: relative;
+  background: linear-gradient(180deg,
+    #205fa6 0%,
+    #1d569a 28%,
+    #164784 47%,
+    #113659 65%,
+    #0d2748 83%,
+    #0a1c38 100%);
+}
+/* the dot field rides on the whole band, not on one section — laid over the
+   gradient rather than replacing it, so the grid runs unbroken from What We Do
+   straight through Why ImageWorks instead of restarting at the seam */
+.iw-blueband::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px);
+  background-size: 26px 26px;
+  pointer-events: none;
+}
+
+/* ---------- HERO — navy field + animated tech mesh ---------- */
+.iw-hero {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; min-height: 600px;
+  overflow: hidden;
+  padding: 128px 40px 96px;   /* top pad clears the 72px nav */
+  background:
+    radial-gradient(120% 90% at 50% 0%, #1b4f86 0%, rgba(27,79,134,0) 62%),
+    linear-gradient(165deg, #12457a 0%, #0e3159 46%, #0a2342 100%);
+}
+/* the circuit sits behind the copy and never eats pointer events */
+.iwh-circuit {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  /* fade out top & bottom so it slides under the nav and into the next section */
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 84%, transparent 100%);
+          mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 84%, transparent 100%);
+}
+
+.iwh-center {
+  position: relative; z-index: 1;
+  width: 100%; max-width: 820px;
+  text-align: center;
+}
+/* soft scrim behind the copy — enough to hold contrast, light enough that the
+   network still reads through the middle of the hero */
+.iwh-center::before {
+  content: "";
+  position: absolute; left: 50%; top: 50%;
+  width: 150%; height: 190%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse at center, rgba(10,35,66,.5) 0%, rgba(10,35,66,.26) 45%, rgba(10,35,66,0) 74%);
+  z-index: -1;
+  pointer-events: none;
+}
+.iwh-h1 { margin: 0; font-size: 46px; line-height: 1.18; font-weight: 800; letter-spacing: -1.5px; color: #fff; }
+.iwh-h1 span { color: #80c34a; }
+.iwh-sub {
+  margin: 22px auto 0; max-width: 580px;
+  font-size: 18px; line-height: 1.6; font-weight: 500;
+  color: rgba(226,238,252,.78);
+  text-wrap: balance;
+}
+.iwh-ms { color: #7cc0f7; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.iwh-cta {
+  display: inline-flex; align-items: center; gap: 12px;
+  height: 54px; padding: 0 24px; margin-top: 40px;
+  border-radius: 4px;
+  background: #80c34a; color: #fff;
+  font-size: 16px; font-weight: 700; text-decoration: none;
+  box-shadow: 0 18px 34px rgba(4,16,34,.38);
+}
+
+@media (min-width: 1441px) {
+  .iw-hero { min-height: 660px; }
+  .iwh-h1 { font-size: 58px; letter-spacing: -1.9px; }
+  .iwh-sub { font-size: 20px; margin-top: 26px; }
+}
+@media (max-width: 860px) {
+  .iw-hero { min-height: 0; padding: 108px 24px 72px; }
+  .iwh-h1 { font-size: 33px; letter-spacing: -1px; }
+  .iwh-sub { font-size: 17px; margin-top: 18px; }
+  .iwh-cta { margin-top: 30px; height: 52px; }
+}
+
+/* ---------- intro statement responsive ---------- */
+@media (max-width: 860px) {
+  .iw-intro-grid { grid-template-columns: 1fr !important; gap: 44px !important; }
+}
+
+
+/* ---------- How We Do It: the process read by descending it ---------- */
+.iw-flow {
+  max-width: 1176px; margin: 0 auto; padding: 0 40px;
+  display: grid; grid-template-columns: 268px 1fr; gap: 90px;
+  align-items: start;
+}
+/* the rail holds its place while the steps go by — the page scroll is the
+   progress bar, so there's nothing to click and nothing to wait for */
+.iw-flow-nav { position: sticky; top: 118px; }   /* 118 clears the 72px nav */
+.iw-flow-list { position: relative; list-style: none; margin: 0; padding: 0; }
+.iw-flow-rail, .iw-flow-fill {
+  position: absolute; left: 5px; width: 2px;
+  /* the rail runs between the first and last node centres, not the full column */
+  top: 33px; height: calc(100% - 66px);
+}
+.iw-flow-rail { background: #e3eaf3; }
+.iw-flow-fill {
+  height: calc((100% - 66px) * var(--p, 0));
+  background: #5c9a2e;
+  transition: height .55s cubic-bezier(.2, .8, .3, 1);
+}
+.iw-flow-item {
+  position: relative; z-index: 1;
+  display: flex; align-items: center; gap: 14px;
+  width: 100%; padding: 21px 0;
+  border: 0; background: transparent; cursor: pointer;
+  text-align: left; font: inherit;
+}
+.iw-flow-item:focus-visible { outline: 2px solid #1266b5; outline-offset: 3px; border-radius: 4px; }
+.iw-flow-dot {
+  flex-shrink: 0; width: 12px; height: 12px; border-radius: 50%;
+  background: #d3dde9; box-shadow: 0 0 0 4px #fff;   /* punches a hole in the rail */
+  transition: background .35s ease, transform .35s cubic-bezier(.2,.8,.3,1);
+}
+.iw-flow-item.is-done .iw-flow-dot { background: #5c9a2e; }
+.iw-flow-item.is-active .iw-flow-dot { transform: scale(1.3); }
+.iw-flow-n { font-size: 12px; font-weight: 800; letter-spacing: 1.6px; color: #a8b6c6; transition: color .3s ease; }
+.iw-flow-l { font-size: 16px; font-weight: 700; color: #7d8ea1; transition: color .3s ease; }
+.iw-flow-item.is-active .iw-flow-n { color: #5c9a2e; }
+.iw-flow-item.is-active .iw-flow-l,
+.iw-flow-item:hover .iw-flow-l { color: #143c66; }
+
+.iw-flow-panels { display: flex; flex-direction: column; gap: 26px; }
+.iw-flow-panel {
+  padding: 30px 0 56px;
+  opacity: .38;                                   /* the step you're not on recedes */
+  transition: opacity .5s ease;
+}
+.iw-flow-panel.is-active { opacity: 1; }
+.iw-flow-copy { max-width: 640px; }
+.iw-flow-out {
+  margin-top: 28px; padding: 6px 30px;
+  border: 1px solid #e3eaf3; border-radius: 2px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(20,40,80,.05), 0 8px 24px rgba(20,40,80,.05);
+}
+/* two up, so the deliverables read as a set rather than a long column */
+.iw-flow-out .iw-steps-list { display: grid; grid-template-columns: 1fr 1fr; column-gap: 34px; }
+.iw-flow-out .iw-steps-list li:nth-child(2) { border-top: 0; }
+
+.iw-steps-eyebrow { font-size: 12px; font-weight: 800; letter-spacing: 1.8px; text-transform: uppercase; color: #5c9a2e; }
+.iw-steps-title { margin: 14px 0 18px; font-size: 30px; line-height: 1.22; font-weight: 800; letter-spacing: -.5px; color: #143c66; text-wrap: balance; }
+.iw-steps-body { margin: 0; font-size: 16px; line-height: 1.7; color: #5a6b82; }
+.iw-steps-body + .iw-steps-body { margin-top: 14px; }
+.iw-steps-body strong { color: #143c66; font-weight: 700; }
+.iw-steps-list { list-style: none; margin: 0; padding: 0; }
+.iw-steps-list li {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 0; border-top: 1px solid #eef2f7;
+  font-size: 15.5px; line-height: 1.45; font-weight: 600; color: #1f2b3e;
+}
+.iw-steps-list li:first-child { border-top: 0; }
+/* each item carries its own glyph — the icon should say something the line
+   doesn't have to repeat, so a row of identical checks is no use here */
+.iw-steps-ic {
+  flex-shrink: 0; width: 30px; height: 30px;
+  border-radius: 9px; background: #eef6e6;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .3s ease;
+}
+.iw-steps-list li:hover .iw-steps-ic { background: #dff0cc; }
+
+@media (max-width: 1080px) {
+  .iw-flow { grid-template-columns: 1fr; gap: 30px; }
+  /* stacked, a sticky rail would just sit on top of the copy */
+  .iw-flow-nav { position: static; }
+  .iw-flow-list { display: flex; overflow-x: auto; gap: 26px; scrollbar-width: none; }
+  .iw-flow-list::-webkit-scrollbar { display: none; }
+  .iw-flow-rail, .iw-flow-fill, .iw-flow-dot { display: none; }
+  .iw-flow-item { width: auto; white-space: nowrap; padding: 8px 0 18px; }
+  .iw-flow-panel { opacity: 1; padding: 18px 0 34px; }   /* nothing to dim once it's a list */
+  .iw-flow-out .iw-steps-list { grid-template-columns: 1fr; }
+  .iw-flow-out .iw-steps-list li:nth-child(2) { border-top: 1px solid #eef2f7; }
+}
+@media (max-width: 720px) {
+  .iw-flow { padding: 0 24px; }
+  .iw-flow-out { padding: 6px 22px; }
+  .iw-steps-title { font-size: 25px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .iw-flow-fill { transition: none; }
+  .iw-flow-panel { opacity: 1; }
+}
+
+/* ---------- intro graphic: one page, x-rayed ---------- */
+.iw-sem-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; fill: #8a98a6; }
+/* One animation drives three things — the two clip rects and the beam — so the
+   reveal can never drift out of step with the line that's supposedly causing it.
+   It rests at each end before turning back, which reads as a system taking a
+   reading rather than a slider being dragged. */
+.iw-xray-sweep { animation: iwXraySweep 12s cubic-bezier(.45, 0, .55, 1) infinite; }
+@keyframes iwXraySweep {
+  0%, 7%    { transform: translateX(74px); }
+  45%, 55%  { transform: translateX(446px); }
+  93%, 100% { transform: translateX(74px); }
+}
+.iw-xray-check { transform-box: fill-box; transform-origin: center; animation: iwXrayPulse 4.5s ease-in-out infinite; }
+@keyframes iwXrayPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.09); } }
+
+/* ---------- footer responsive ---------- */
+/* inline styles set the desktop grid; override with !important on small screens */
+@media (max-width: 860px) {
+  .iw-footer { padding: 72px 44px 0 !important; }
+  .iw-foot-grid { grid-template-columns: 1fr !important; gap: 52px !important; justify-items: center !important; }
+  /* each stacked block becomes a centered band; text inside stays left-aligned */
+  .iw-foot-grid > * { width: 100% !important; max-width: 420px !important; margin-left: auto !important; margin-right: auto !important; text-align: left !important; }
+  .iw-foot-grid form { max-width: 100% !important; }
+}
+@media (max-width: 520px) {
+  .iw-footer { padding: 60px 34px 0 !important; }
+  .iw-foot-menus { grid-template-columns: 1fr !important; gap: 40px !important; }
+}
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .iw-reveal { transition: none; opacity: 1; transform: none; }
+  .iw-track { animation: none !important; }
+  /* the scan parks mid-card: both readings stay legible, nothing moves */
+  .iw-xray-sweep { animation: none !important; transform: translateX(260px); }
+  .iw-xray-check { animation: none !important; }
+}
